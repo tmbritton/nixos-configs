@@ -111,7 +111,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     wget
     git
     curl
@@ -121,6 +121,10 @@
     vivaldi-ffmpeg-codecs
     xclip
     neovim
+    gcc
+    gnumake
+    cmake
+    pkg-config
   ];
 
   programs.ssh = {
@@ -146,6 +150,28 @@
     config = "nvim ~/configuration.nix";
   };
 
+  system.activationScripts.cloneNvimConfig = {
+    text = ''
+      echo "=== STARTING NVIM CONFIG SETUP ==="
+      USER_HOME=/home/tom
+      echo "Current user: $USER"
+      echo "Home directory: $USER_HOME"
+      if [ ! -d "$USER_HOME/.config" ]; then
+        echo "Creating .config directory..."
+        mkdir -p "$USER_HOME/.config"
+      fi
+      if [ ! -d "$USER_HOME/.config/nvim" ]; then
+        echo "Creating nvim directory..."
+        mkdir -p "$USER_HOME/.config/nvim"
+        echo "Attempting to clone repository..."
+        ${pkgs.git}/bin/git clone https://github.com/tmbritton/kickstart.nvim.git $USER_HOME/.config/nvim
+        echo "Clone command completed with status: $?"
+      fi
+      chown -R tom:users $USER_HOME/.config/nvim
+      echo "=== NVIM CONFIG SETUP COMPLETE ==="
+    '';
+    deps = [];
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
