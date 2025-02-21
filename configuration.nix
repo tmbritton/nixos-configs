@@ -119,6 +119,8 @@
     alacritty
     vivaldi
     vivaldi-ffmpeg-codecs
+    xclip
+    neovim
   ];
 
   programs.ssh = {
@@ -130,6 +132,19 @@
     '';
   };
 
+  networking = {
+    nameservers = [ 
+      "1.1.1.1"
+      "1.0.0.1"
+    ];
+  };
+
+  # Aliases
+  environment.shellAliases = {
+    clip = "xclip -selection clipboard <";
+    rebuild = "sudo nixos-rebuild switch";
+    config = "nvim ~/configuration.nix";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
