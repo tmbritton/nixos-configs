@@ -125,6 +125,18 @@
     gnumake
     cmake
     pkg-config
+    nodejs_22
+    unzip
+    python3
+    lua
+    luarocks
+    ripgrep
+    typescript
+    typescript-language-server
+    go
+    gopls
+    tree-sitter
+    python312Packages.pip
   ];
 
   programs.ssh = {
@@ -148,7 +160,8 @@
     clip = "xclip -selection clipboard <";
     rebuild = "sudo nixos-rebuild switch";
     config = "nvim ~/configuration.nix";
-  };
+    rg = "ripgrep";  
+};
 
   system.activationScripts.cloneNvimConfig = {
     text = ''
