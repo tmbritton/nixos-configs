@@ -92,8 +92,8 @@
   };
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "tom";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "tom";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -137,6 +137,11 @@
     gopls
     tree-sitter
     python312Packages.pip
+    direnv
+    nix-direnv
+    tmux
+    eza
+    fzf
   ];
 
   programs.ssh = {
@@ -146,6 +151,11 @@
         User git
         IdentityFile ~/.ssh/id_ed25519 
     '';
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   networking = {
@@ -160,7 +170,8 @@
     clip = "xclip -selection clipboard <";
     rebuild = "sudo nixos-rebuild switch";
     config = "nvim ~/configuration.nix";
-    rg = "ripgrep";  
+    rg = "ripgrep";
+    ls = "eza -la --icons";
 };
 
   system.activationScripts.cloneNvimConfig = {
@@ -189,6 +200,9 @@
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  # Experimental Features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
